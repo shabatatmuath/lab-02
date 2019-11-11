@@ -1,0 +1,24 @@
+@import url("./layouts.css");
+@import url("./modules.css");
+header {
+  background-color: rgb(21, 147, 167);
+}
+
+body {
+    margin: auto;
+    text-align: center;
+    padding: 111px;
+    background-color: rgba(100, 100, 95, 0.315);
+    color: rgba(110, 18, 12, 0.801);
+}
+
+
+h2 {
+    font-family: 'Yeon Sung', cursive;
+    color: rgb(48, 178, 230);
+}
+
+figcaption {
+    font-family: cursive;
+    font-size: 90%;
+    color: rgb(32, 152, 189);}
