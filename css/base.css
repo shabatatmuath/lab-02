@@ -1,0 +1,42 @@
+@import url("./layouts.css");
+@import url("./modules.css");
+header {
+  background-color: rgb(75, 32, 31);
+}
+
+body {
+    margin: auto;
+    text-align: center;
+    padding: 111px;
+    background-color: rgba(75, 62, 62, 0.315);
+    color: rgba(71, 199, 216, 0.801);
+    font-family: 'Yeon Sung', cursive;
+
+}
+
+
+h2 {
+    font-family: 'Yeon Sung', cursive;
+    color: rgb(48, 178, 230);
+}
+
+figcaption {
+    font-family: cursive;
+    font-size: 70%;
+    color: rgb(32, 152, 189);}
+
+
+    body {
+        margin: auto;
+        padding: 111px;
+        font-family: 'Playfair Display', serif;
+        font-family: 'Anton', sans-serif;
+        font-family: 'Sunshiney', cursive;
+         text-align: center;
+         font-size: large;
+         font-weight: bolder;
+     }
+     footer {
+        clear: both;
+     }
+     
