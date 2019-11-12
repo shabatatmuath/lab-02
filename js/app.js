@@ -1,77 +1,61 @@
-Horn.allHorns = [];
+'use strict';
 
-//               Functions
-
-function Horn(horn){
-  this.image_url = horn.image_url;
-  this.title = horn.title;
-  this.description = horn.description;
-  this.keyword = horn.keyword;
-  this.horns = horn.horns;
+function Horns(data) {
+  this.image_url = data.image_url;
+  this.title = data.title;
+  this.description = data.description;
+  this.keyword = data.keyword;
+  this.horns = data.horns;
+  Horns.all.push(this);
 }
+Horns.all = [];
 
-Horn.prototype.render = function(){
-  let hornClone = $('#photo-template').clone();
-  let $hornClone = $(hornClone[0].content);
+Horns.prototype.render = function() {
 
-  $hornClone.find('h2').text(this.title);
-  $hornClone.find('h2').attr('data-keyword', this.keyword);
-  $hornClone.find('img').attr('src', this.image_url);
-  $hornClone.find('img').attr('data-keyword', this.keyword);
-  $hornClone.find('img').attr('alt', this.description);
-  $hornClone.find('figcaption').text(`${this.description} Number of horns ${this.horns}`);
-  $hornClone.find('figcaption').attr('data-keyword', this.keyword);
-  $hornClone.find('p').text(this.keyword);
-  $hornClone.find('p').attr('data-keyword', this.keyword);
+  // Create a new empty div tag
+  let hornOutput = $('<div></div>');
+      hornOutput.addClass(this.keyword);
 
-  $hornClone.appendTo('main');
-}
+  // clone (copy) the html from inside the photo-template
+  let template = $('#photo-template').html();
 
-Horn.prototype.populateDropDownMenu = function() {
-  let list = $('#dropDown').clone();
-  let $list = $(list[0].content);
+  // Add the template to the output div
+  hornOutput.html( template );
 
-  $list.find('option').text(this.keyword);
-  $list.find('option').attr('data-keyword', this.keyword);
-  $list.find('option').val(this.keyword);
-  $list.find('img').attr('alt', this.keyword);
-  $list.appendTo('select');
-}
+  // Put the data in
+  hornOutput.find('h2').text( this.title );
+  hornOutput.find('img').attr('src', this.image_url);
+  hornOutput.find('p').text(this.description);
 
-Horn.readJson = () => {
-  $.get('./data/page-1.json')
-    .then(data => {
-      data.forEach(element => {
-        Horn.allHorns.push(new Horn(element))
-      });
-    })
-    .then(Horn.loadHorns);
+  $('main').append(hornOutput);
+
 };
 
-Horn.loadHorns = () => {
-  Horn.allHorns.forEach(horn => horn.render());
-  Horn.allHorns.forEach(horn => horn.populateDropDownMenu());
-};
+function populateSelectBox() {
+  let seen = {};
+  let select = $('select');
+  Horns.all.forEach( (horn) => {
+    if ( ! seen[horn.keyword] ) {
+      let option = `<option value="${horn.keyword}">${horn.keyword}</option>`;
+      select.append(option);
+      seen[horn.keyword] = true;
+    }
+  });
 
-// DOM-ready function
-$(document).ready(function(){
-  $('#photo-template').hide();
+  console.log(seen);
+}
+
+$('select').on('change', function() {
+  let selected = $(this).val();
+  $('div').hide();
+  $(`.${selected}`).fadeIn(800);
 });
 
-//               Script
-//Shorthand for single point of entry
-$(() => Horn.readJson());
-
-//select dropdown for filtering
-$('select').on('click',function(){
-  let $selection = $(this).val();
-  $(`img`).hide();
-  $('p').hide();
-  $('h2').hide();
-  $('figcaption').hide();
-  $(`p[data-keyword="${$selection}"]`).show();
-  $(`h2[data-keyword="${$selection}"]`).show();
-  $(`figcaption[data-keyword="${$selection}"]`).show();
-  $(`img[data-keyword="${$selection}"]`).show();
-  $(`img[alt="${$selection}"]`).show();
-});
+$.get('../data/page-1.json')
+  .then( data => {
+    data.forEach( (thing) => {
+      let horn = new Horns(thing);
+      horn.render();
+    });
+  })
+  .then( () => populateSelectBox() );
